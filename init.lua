@@ -19,6 +19,8 @@ require('packer').startup(function(use)
   use { 'Raimondi/delimitMate' } -- auto add closing braces
 
   use { 'folke/tokyonight.nvim' } -- tokyonight colorscheme
+
+  use { 'vim-scripts/bufexplorer.zip' } --bufexplorer
 end)
 
 -- Set ',' as the leader key
@@ -67,3 +69,12 @@ vim.o.scrolloff = 7
 -- use the moon variant
 vim.cmd[[colorscheme tokyonight-night]]
 
+-- arrows, brackets, and hl can wrap around
+vim.opt.whichwrap:append("<,>,[,],h,l")
+
+-- bufexplorer customization
+vim.g.bufExplorerDefaultHelp = 0
+vim.g.bufExplorerShowRelativePath = 1
+vim.g.bufExplorerFindActive = 1
+vim.g.bufExplorerSortBy = 'name'
+vim.api.nvim_set_keymap('n', '<leader>o', ':BufExplorer<CR>', { noremap = true, silent = true })
