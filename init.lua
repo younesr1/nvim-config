@@ -15,6 +15,10 @@ require('packer').startup(function(use)
 
   use {'junegunn/fzf', run = './install --all'}  -- Installs fzf binaries
   use {'junegunn/fzf.vim'}  -- fzf vim integration
+
+  use { 'Raimondi/delimitMate' } -- auto add closing braces
+
+  use { 'folke/tokyonight.nvim' } -- tokyonight colorscheme
 end)
 
 -- Set ',' as the leader key
@@ -60,4 +64,6 @@ vim.api.nvim_set_keymap('n', '<Space>', '/', { noremap = true, silent = true })
 -- scroll offset of 7
 vim.o.scrolloff = 7
 
+-- use the moon variant
+vim.cmd[[colorscheme tokyonight-night]]
 
