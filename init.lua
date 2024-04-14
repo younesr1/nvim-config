@@ -78,3 +78,6 @@ vim.g.bufExplorerShowRelativePath = 1
 vim.g.bufExplorerFindActive = 1
 vim.g.bufExplorerSortBy = 'name'
 vim.api.nvim_set_keymap('n', '<leader>o', ':BufExplorer<CR>', { noremap = true, silent = true })
+
+-- clear search with leader + enter
+vim.api.nvim_set_keymap('n', '<leader><CR>', ':noh<CR>', { noremap = true, silent = true })
