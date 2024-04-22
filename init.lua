@@ -21,6 +21,18 @@ require('packer').startup(function(use)
   use { 'folke/tokyonight.nvim' } -- tokyonight colorscheme
 
   use { 'vim-scripts/bufexplorer.zip' } --bufexplorer
+
+  -- Start Completion framework
+    use 'hrsh7th/nvim-cmp'
+    -- Completion sources
+    use 'hrsh7th/cmp-nvim-lsp'
+    use 'hrsh7th/cmp-buffer'
+    use 'hrsh7th/cmp-path'
+    use 'hrsh7th/cmp-cmdline'
+    -- Snippet engine
+    use 'hrsh7th/vim-vsnip'
+    use 'hrsh7th/cmp-vsnip'
+  -- End Completion framework
 end)
 
 -- Set ',' as the leader key
@@ -81,3 +93,45 @@ vim.api.nvim_set_keymap('n', '<leader>o', ':BufExplorer<CR>', { noremap = true, 
 
 -- clear search with leader + enter
 vim.api.nvim_set_keymap('n', '<leader><CR>', ':noh<CR>', { noremap = true, silent = true })
+
+-- start autocomplete setup
+local cmp = require'cmp'
+cmp.setup({
+    snippet = {
+        expand = function(args)
+            vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+        end,
+    },
+    window = {
+      completion = cmp.config.window.bordered(),
+      documentation = cmp.config.window.bordered(),
+    },
+    mapping = cmp.mapping.preset.insert({
+      ['<Tab>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+      ['<S-Tab>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+      ['<C-e>'] = cmp.mapping.abort(),
+      ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    }),
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+      { name = 'vsnip' }, -- For vsnip users.
+    }, {
+      { name = 'buffer' },
+    })
+})
+  -- Use buffer source for `/` (searching)
+cmp.setup.cmdline('/', {
+    sources = {
+        { name = 'buffer' }
+    }
+})
+
+-- Use cmdline & path source for ':' (command prompts)
+cmp.setup.cmdline(':', {
+    sources = cmp.config.sources({
+        { name = 'path' }
+    }, {
+        { name = 'cmdline' }
+    })
+})
+-- end autocomplete setup
