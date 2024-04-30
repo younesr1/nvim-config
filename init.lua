@@ -33,6 +33,9 @@ require('packer').startup(function(use)
     use 'hrsh7th/vim-vsnip'
     use 'hrsh7th/cmp-vsnip'
   -- End Completion framework
+
+  -- git blame
+    use 'f-person/git-blame.nvim'
 end)
 
 -- Set ',' as the leader key
@@ -135,3 +138,9 @@ cmp.setup.cmdline(':', {
     })
 })
 -- end autocomplete setup
+
+-- default disable and toggle git blame with gl
+require('gitblame').setup {
+    enabled = false,
+}
+vim.api.nvim_set_keymap('n', 'gl', ':GitBlameToggle<CR>', { noremap = true, silent = true })
