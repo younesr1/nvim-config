@@ -36,19 +36,23 @@ require('packer').startup(function(use)
 
   -- git blame
     use 'f-person/git-blame.nvim'
+
+  -- telescope
+    use {
+      'nvim-telescope/telescope.nvim', tag = '0.1.6',
+      requires = { {'nvim-lua/plenary.nvim'} }
+    }
+    use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+
+    -- Install nvim-treesitter
+    use {
+        'nvim-treesitter/nvim-treesitter',
+        run = ':TSUpdate',
+    }
 end)
 
 -- Set ',' as the leader key
 vim.g.mapleader = ','
-
--- Keybinding for fzf
-vim.api.nvim_set_keymap('n', '<Leader>p', ':Files<CR>', {noremap = true, silent = true})
-
--- Ag with ,F to search for word
-vim.api.nvim_set_keymap('n', '<leader>F', ':Ag<Space>', { noremap = true, silent = true })
--- Ag with ,f to search for current highlighted word
-vim.api.nvim_set_keymap('n', '<leader>f', ":lua vim.cmd('Ag ' .. vim.fn.expand('<cword>'))<CR>", { noremap = true, silent = true })
-
 
 -- prev tab with ,r,
 vim.api.nvim_set_keymap('n', '<leader>r<leader>', ':tabprevious<CR>', { noremap = true, silent = true })
@@ -144,3 +148,31 @@ require('gitblame').setup {
     enabled = false,
 }
 vim.api.nvim_set_keymap('n', 'gl', ':GitBlameToggle<CR>', { noremap = true, silent = true })
+
+-- Telescope preview lags with very big files
+require("telescope").setup {
+  defaults = {
+    preview = {
+        filesize_limit = 3, -- MB
+    },
+  }
+}
+-- Telescope key mappings
+vim.api.nvim_set_keymap('n', '<leader>ff', "<cmd>lua require('telescope.builtin').find_files()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>fg', "<cmd>lua require('telescope.builtin').live_grep()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>fd', "<cmd>lua require('telescope.builtin').grep_string({ search = vim.fn.expand('<cword>') })<CR>", { noremap = true, silent = true })
+
+-- Configure nvim-treesitter
+require'nvim-treesitter.configs'.setup {
+  -- Install languages synchronously (only applied to `ensure_installed`)
+  sync_install = false,
+
+  -- List of parsers to install
+  ensure_installed = { "cpp", "python", "c", "rust", "cuda" },
+
+  -- Install languages synchronously
+  highlight = {
+    enable = true,              -- false will disable the whole extension
+    disable = {},               -- list of language that will be disabled
+  },
+}
