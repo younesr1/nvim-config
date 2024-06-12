@@ -153,7 +153,7 @@ vim.api.nvim_set_keymap('n', 'gl', ':GitBlameToggle<CR>', { noremap = true, sile
 require("telescope").setup {
   defaults = {
     preview = {
-        filesize_limit = 3, -- MB
+        filesize_limit = 1, -- MB
     },
   }
 }
