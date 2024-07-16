@@ -49,6 +49,9 @@ require('packer').startup(function(use)
         'nvim-treesitter/nvim-treesitter',
         run = ':TSUpdate',
     }
+
+    -- Add NERDTree
+    use 'preservim/nerdtree'
 end)
 
 -- Set ',' as the leader key
@@ -176,3 +179,5 @@ require'nvim-treesitter.configs'.setup {
     disable = {},               -- list of language that will be disabled
   },
 }
+
+vim.api.nvim_set_keymap('n', '<leader>nn', ':NERDTreeToggle<CR>', { noremap = true, silent = true })
