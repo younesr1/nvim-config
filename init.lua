@@ -23,16 +23,17 @@ require('packer').startup(function(use)
   use { 'vim-scripts/bufexplorer.zip' } --bufexplorer
 
   -- Start Completion framework
-    use 'hrsh7th/nvim-cmp'
-    -- Completion sources
-    use 'hrsh7th/cmp-nvim-lsp'
-    use 'hrsh7th/cmp-buffer'
-    use 'hrsh7th/cmp-path'
-    use 'hrsh7th/cmp-cmdline'
-    -- Snippet engine
-    use 'hrsh7th/vim-vsnip'
-    use 'hrsh7th/cmp-vsnip'
+  use 'hrsh7th/nvim-cmp'
+  -- Completion sources
+  use 'hrsh7th/cmp-nvim-lsp'
+  use 'hrsh7th/cmp-buffer'
+  use 'hrsh7th/cmp-path'
+  use 'hrsh7th/cmp-cmdline'
+  -- Snippet engine
+  use 'hrsh7th/vim-vsnip'
+  use 'hrsh7th/cmp-vsnip'
   -- End Completion framework
+  use 'neovim/nvim-lspconfig'
 
   -- git blame
     use 'f-person/git-blame.nvim'
@@ -65,8 +66,6 @@ vim.api.nvim_set_keymap('n', '<leader>t<leader>', ':tabnext<CR>', { noremap = tr
 -- enable line numbers
 vim.o.number = true
 
--- go to defintion with gd
-vim.api.nvim_set_keymap('n', 'gd', '<C-]>', { noremap = true, silent = true })
 -- go to bottom of file with gb
 vim.api.nvim_set_keymap('n', 'gb', 'G', { noremap = true, silent = true })
 
@@ -181,3 +180,40 @@ require'nvim-treesitter.configs'.setup {
 }
 
 vim.api.nvim_set_keymap('n', '<leader>nn', ':NERDTreeToggle<CR>', { noremap = true, silent = true })
+
+-- Neovide specific config
+if vim.g.neovide then
+    vim.g.neovide_fullscreen = true
+    vim.g.neovide_scroll_animation_length = 0.3
+end
+
+-- Setup language servers
+local lspconfig = require("lspconfig")
+local cmp_nvim_lsp = require("cmp_nvim_lsp")
+
+local capabilities = cmp_nvim_lsp.default_capabilities()
+
+-- Enable some language servers with the additional completion capabilities offered by nvim-cmp
+lspconfig.clangd.setup {
+  capabilities = capabilities,
+  cmd = {
+    "/usr_src/firmware/bazel-firmware/external/tesla_clang/usr/bin/clangd",
+    "--header-insertion=never",
+  },
+}
+
+lspconfig.rust_analyzer.setup { capabilities = capabilities }
+lspconfig.vala_ls.setup { capabilities = capabilities }
+lspconfig.pylyzer.setup { capabilities = capabilities }
+
+-- Key mapping for :ClangdSwitchSourceHeader
+vim.keymap.set('n', 'gh', ':ClangdSwitchSourceHeader<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { noremap = true, silent = true })
+vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { noremap = true, silent = true })
+vim.keymap.set('n', 'gr', vim.lsp.buf.references, { noremap = true, silent = true })
+vim.keymap.set('n', 'K', vim.lsp.buf.hover, { noremap = true, silent = true })
+vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, { noremap = true, silent = true })
+vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, { noremap = true, silent = true })
+
+-- Paste with ctrl-shift-v
+vim.api.nvim_set_keymap('i', '<C-S-v>', '<C-r>+', { noremap = true, silent = true })
