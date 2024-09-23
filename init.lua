@@ -170,7 +170,7 @@ require'nvim-treesitter.configs'.setup {
   sync_install = false,
 
   -- List of parsers to install
-  ensure_installed = { "cpp", "python", "c", "rust", "cuda" },
+  ensure_installed = { "cpp", "python", "c", "rust", "cuda", "lua", "markdown", "markdown_inline" },
 
   -- Install languages synchronously
   highlight = {
@@ -217,3 +217,7 @@ vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, { noremap = true, silen
 
 -- Paste with ctrl-shift-v
 vim.api.nvim_set_keymap('i', '<C-S-v>', '<C-r>+', { noremap = true, silent = true })
+
+-- Move things with JK
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
