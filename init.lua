@@ -193,15 +193,6 @@ local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
 local capabilities = cmp_nvim_lsp.default_capabilities()
 
--- Enable some language servers with the additional completion capabilities offered by nvim-cmp
-lspconfig.clangd.setup {
-  capabilities = capabilities,
-  cmd = {
-    "/usr_src/firmware/bazel-firmware/external/tesla_clang/usr/bin/clangd",
-    "--header-insertion=never",
-  },
-}
-
 lspconfig.rust_analyzer.setup { capabilities = capabilities }
 lspconfig.vala_ls.setup { capabilities = capabilities }
 lspconfig.pylyzer.setup { capabilities = capabilities }
