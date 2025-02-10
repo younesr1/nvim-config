@@ -53,6 +53,9 @@ require('packer').startup(function(use)
 
     -- Add NERDTree
     use 'preservim/nerdtree'
+
+    -- Add vim-maximizer
+    use 'szw/vim-maximizer'
 end)
 
 -- Set ',' as the leader key
@@ -212,3 +215,5 @@ vim.api.nvim_set_keymap('i', '<C-S-v>', '<C-r>+', { noremap = true, silent = tru
 -- Move things with JK
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
+
+vim.api.nvim_set_keymap('n', '<leader>x', ':MaximizerToggle<CR>', { noremap = true, silent = true })
