@@ -216,10 +216,4 @@ vim.api.nvim_set_keymap('i', '<C-S-v>', '<C-r>+', { noremap = true, silent = tru
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
 
--- Pane style short-cuts
 vim.api.nvim_set_keymap('n', '<leader>x', ':MaximizerToggle<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('t', '<Esc>', [[<C-\><C-n>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<M-h>', '<C-w>h', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<M-j>', '<C-w>j', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<M-k>', '<C-w>k', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<M-l>', '<C-w>l', { noremap = true, silent = true })
