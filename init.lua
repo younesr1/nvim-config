@@ -33,7 +33,8 @@ require('packer').startup(function(use)
   use 'hrsh7th/vim-vsnip'
   use 'hrsh7th/cmp-vsnip'
   -- End Completion framework
-  use 'neovim/nvim-lspconfig'
+  use { 'neovim/nvim-lspconfig', tag = 'v0.1.7' }
+
 
   -- git blame
     use 'f-person/git-blame.nvim'
@@ -44,12 +45,6 @@ require('packer').startup(function(use)
       requires = { {'nvim-lua/plenary.nvim'} }
     }
     use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
-
-    -- Install nvim-treesitter
-    use {
-        'nvim-treesitter/nvim-treesitter',
-        run = ':TSUpdate',
-    }
 
     -- Add NERDTree
     use 'preservim/nerdtree'
@@ -145,6 +140,24 @@ cmp.setup.cmdline(':', {
 })
 -- end autocomplete setup
 
+-- Start clangd setup
+-- Setup clangd LSP
+require('lspconfig').clangd.setup({
+  cmd = { "clangd", "--background-index" },
+  filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
+  root_dir = require('lspconfig').util.root_pattern(
+    '.clangd',
+    '.clang-tidy',
+    '.clang-format',
+    'compile_commands.json',
+    'compile_flags.txt',
+    'configure.ac',
+    '.git'
+  ),
+  capabilities = require('cmp_nvim_lsp').default_capabilities(),
+})
+-- end clangd setup
+
 -- default disable and toggle git blame with gl
 require('gitblame').setup {
     enabled = false,
@@ -164,21 +177,6 @@ vim.api.nvim_set_keymap('n', '<leader>ff', "<cmd>lua require('telescope.builtin'
 vim.api.nvim_set_keymap('n', '<leader>fg', "<cmd>lua require('telescope.builtin').live_grep()<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fd', "<cmd>lua require('telescope.builtin').grep_string({ search = vim.fn.expand('<cword>') })<CR>", { noremap = true, silent = true })
 
--- Configure nvim-treesitter
-require'nvim-treesitter.configs'.setup {
-  -- Install languages synchronously (only applied to `ensure_installed`)
-  sync_install = false,
-
-  -- List of parsers to install
-  ensure_installed = { "cpp", "python", "c", "rust", "cuda", "lua", "markdown", "markdown_inline" },
-
-  -- Install languages synchronously
-  highlight = {
-    enable = true,              -- false will disable the whole extension
-    disable = {},               -- list of language that will be disabled
-  },
-}
-
 vim.api.nvim_set_keymap('n', '<leader>nn', ':NERDTreeToggle<CR>', { noremap = true, silent = true })
 
 -- Neovide specific config
@@ -186,16 +184,6 @@ if vim.g.neovide then
     vim.g.neovide_fullscreen = true
     vim.g.neovide_scroll_animation_length = 0.3
 end
-
--- Setup language servers
-local lspconfig = require("lspconfig")
-local cmp_nvim_lsp = require("cmp_nvim_lsp")
-
-local capabilities = cmp_nvim_lsp.default_capabilities()
-
-lspconfig.rust_analyzer.setup { capabilities = capabilities }
-lspconfig.vala_ls.setup { capabilities = capabilities }
-lspconfig.pylyzer.setup { capabilities = capabilities }
 
 -- Key mapping for :ClangdSwitchSourceHeader
 vim.keymap.set('n', 'gh', ':ClangdSwitchSourceHeader<CR>', { noremap = true, silent = true })
