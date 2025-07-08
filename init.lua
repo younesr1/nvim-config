@@ -144,7 +144,7 @@ cmp.setup.cmdline(':', {
 -- Setup clangd LSP
 require('lspconfig').clangd.setup({
   cmd = { "clangd", "--background-index" },
-  filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
+  filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto", "dv", "cl" },
   root_dir = require('lspconfig').util.root_pattern(
     '.clangd',
     '.clang-tidy',
